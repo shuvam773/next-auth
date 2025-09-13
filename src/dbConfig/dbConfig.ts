@@ -11,11 +11,11 @@ export async function connect(){
         })
     
         connection.on('error', (err) =>{
-            console.log('MongoDB connection error:', err);
-            process.exit();
+            console.log('MongoDB connection error, please make sure db is up and running: ' + err);
         })
-    }catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    process.exit(1);
+
+    } catch (error) {
+        console.log('Something went wrong in connecting to DB');
+        console.log(error);
     }
 }
