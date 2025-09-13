@@ -14,12 +14,15 @@ export async function POST(request: NextRequest) {
         console.log(reqBody);
 
         // Check if user exists
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).select('+password');
         if (!user) {
             return NextResponse.json({ error: 'User does not exist' }, { status: 400 });
         }
 
         // Check if password is correct
+        if (!user.password) {
+            return NextResponse.json({ error: 'Invalid user data' }, { status: 400 });
+        }
         const validPassword = await bcryptjs.compare(password, user.password);
         if (!validPassword) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 400 });
@@ -56,7 +59,8 @@ export async function POST(request: NextRequest) {
 
         return response;
 
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred';
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
