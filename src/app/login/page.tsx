@@ -14,7 +14,6 @@ export default function LoginPage() {
 
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
 
     const onLogin = async () => {
         try {

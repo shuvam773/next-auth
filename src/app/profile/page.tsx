@@ -22,8 +22,9 @@ export default function ProfilePage() {
         try {
             await axios.get('/api/users/logout');
             router.push('/login');
-        } catch (error: any) {
-            console.log('Logout failed', error.message);
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Logout failed';
+            console.log('Logout failed', message);
         }
     }
 
@@ -32,8 +33,9 @@ export default function ProfilePage() {
             try {
                 const response = await axios.get('/api/users/me');
                 setUser(response.data.data);
-            } catch (error: any) {
-                console.log('Error getting user details', error.message);
+            } catch (err: unknown) {
+                const message = err instanceof Error ? err.message : 'Error getting user details';
+                console.log('Error getting user details', message);
                 router.push('/login');
             } finally {
                 setLoading(false);
