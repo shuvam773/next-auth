@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import  axios  from 'axios'
+import  axios from 'axios'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 
@@ -23,8 +23,15 @@ export default function LoginPage() {
             console.log('Login success', response.data);
             toast.success('Login success');
             router.push('/profile');
-        } catch (error: any) {
-            const message = error?.response?.data?.error || error?.message || 'Login failed';
+        } catch (err: unknown) {
+            let message = 'Login failed';
+            if (axios.isAxiosError(err)) {
+                type ApiErrorResponse = { error?: string }
+                const data = err.response?.data as unknown as ApiErrorResponse | undefined;
+                message = data?.error ?? err.message;
+            } else if (err instanceof Error) {
+                message = err.message;
+            }
             console.log('Login failed', message);
             toast.error(message);
         } finally {
@@ -96,7 +103,7 @@ export default function LoginPage() {
                 </div>
 
                 <p className="text-center text-sm text-gray-600 mt-4">
-                    Don't have an account?{' '}
+                    Don&apos;t have an account?{' '}
                     <Link
                         href="/signup"
                         className="text-blue-600 hover:text-blue-800 font-medium"
