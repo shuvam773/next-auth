@@ -1,21 +1,40 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import LogoutButton from "./LogoutButton";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
+  const isLoggedIn = Boolean(token);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Navigation */}
       <nav className="flex justify-between items-center p-6">
         <div className="text-2xl font-bold text-blue-800">AuthApp</div>
         <div className="flex space-x-4">
-          <Link href="/login" className="px-4 py-2 text-blue-700 hover:text-blue-900 font-medium">
-            Login
-          </Link>
-          <Link 
-            href="/signup" 
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
-          >
-            Sign Up
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link 
+                href="/profile" 
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+              >
+                Get Started
+              </Link>
+              <LogoutButton className="px-4 py-2 text-blue-700 hover:text-blue-900 font-medium" />
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="px-4 py-2 text-blue-700 hover:text-blue-900 font-medium">
+                Login
+              </Link>
+              <Link 
+                href="/signup" 
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -30,18 +49,32 @@ export default function Home() {
         </p>
         
         <div className="mt-10 flex justify-center space-x-4">
-          <Link
-            href="/signup"
-            className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 transition-colors"
-          >
-            Get Started
-          </Link>
-          <Link
-            href="/login"
-            className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10 transition-colors"
-          >
-            I have an account
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link
+                href="/profile"
+                className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 transition-colors"
+              >
+                Get Started
+              </Link>
+              <LogoutButton className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10 transition-colors" />
+            </>
+          ) : (
+            <>
+              <Link
+                href="/signup"
+                className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 transition-colors"
+              >
+                Get Started
+              </Link>
+              <Link
+                href="/login"
+                className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10 transition-colors"
+              >
+                I have an account
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
@@ -106,15 +139,26 @@ export default function Home() {
               <p className="text-gray-400 mt-2">Secure authentication for modern web applications</p>
             </div>
             <div className="flex space-x-6">
-              <Link href="/login" className="text-gray-300 hover:text-white">
-                Login
-              </Link>
-              <Link href="/signup" className="text-gray-300 hover:text-white">
-                Sign Up
-              </Link>
-              <Link href="/profile" className="text-gray-300 hover:text-white">
-                Profile
-              </Link>
+              {isLoggedIn ? (
+                <>
+                  <Link href="/profile" className="text-gray-300 hover:text-white">
+                    Get Started
+                  </Link>
+                  <LogoutButton className="text-gray-300 hover:text-white" />
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="text-gray-300 hover:text-white">
+                    Login
+                  </Link>
+                  <Link href="/signup" className="text-gray-300 hover:text-white">
+                    Sign Up
+                  </Link>
+                  <Link href="/profile" className="text-gray-300 hover:text-white">
+                    Profile
+                  </Link>
+                </>
+              )}
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
