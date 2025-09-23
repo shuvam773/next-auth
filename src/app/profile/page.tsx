@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import Link from 'next/link'
+import {House} from 'lucide-react';
 
 
 interface User {
@@ -58,6 +59,7 @@ export default function ProfilePage() {
             <div className="max-w-4xl mx-auto px-4">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-8">
+                    <House className='text-blue-600 w-6 h-6 cursor-pointer' onClick={() => router.push('/')} />
                     <h1 className="text-3xl font-bold text-gray-800">Profile</h1>
                     <button
                         onClick={onLogout}
